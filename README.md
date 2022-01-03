@@ -2,12 +2,24 @@
 This application zips up Visual Studio Projects and Solutions without unnecessary files/folders like the bin and obj directories.
 
 ## Installation Instructions
-There isn't a way to install it yet.
+You will need to build the project to create an exe at this point. In the project directory, run this command at the command line:
+
+    dotnet publish -r win-x64 -c Release /p:PublishSingleFile=true /p:PublishTrimmed=true --self-contained true
+
+Take the generated exe and place it in the directory where you want the Visual Studio solution zipped up. Double-click the file to execute it.
+
+## Current Features
+ * Zips up a directory and all sub-directories
+ * Excludes hidden folders and files
+ * Excludes files and folders I specify (bin/obj/etc.)
 
 ## Roadmap
-These are the things I want to accomplish.
- * Zip up a directory and all sub-directories
- * Exclude hidden folders and files
- * Exclude files and folders I specify (bin/obj/etc.)
- * Add to right-click menu in Windows
- * Allow for rename of zip file during creation
+ * Automated build of the self-contained exe file on commit.
+ * Use of a new zip file name if the current one already exists.
+ * A dynamic set of exclusions instead of hard-coding them.
+ * Make use of the .gitignore file to exclude files and folders.
+
+## Possible Ideas
+ * Allow for rename of zip file during creation.
+ * Show up on the right-click menu.
+ * Visual Studio extension
