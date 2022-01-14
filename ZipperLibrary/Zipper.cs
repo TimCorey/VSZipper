@@ -1,19 +1,22 @@
 ﻿using System.IO.Compression;
 
+using Microsoft.Extensions.Configuration;
+
 namespace ZipperLibrary;
 
 public class Zipper
 {
     private List<string> exclusions = new();
 
-    public Zipper()
+    public Zipper(IConfiguration config)
     {
-        exclusions.Add(@"\bin\");
-        exclusions.Add(@"\obj\");
-        exclusions.Add(@"\.vs\");
-        exclusions.Add(@"\.git\");
-        exclusions.Add(@".exe");
-        exclusions.Add(@".zip");
+        IConfigurationSection? exclusionSection = config.GetSection("Exclusions");
+        string[]? excludedPathsAndExtensions = exclusionSection.Get<string[]>();
+
+        foreach ( string excludedPathOrExtension in excludedPathsAndExtensions )
+        {
+            exclusions.Add(excludedPathOrExtension);
+        }
     }
 
     public void Zip()
@@ -34,15 +37,15 @@ public class Zipper
                 .GetFiles("*", SearchOption.AllDirectories)
                 .Where(x => (x.Attributes & FileAttributes.Hidden) == 0 && x.FullName != zipFile);
 
-            foreach (var f in files)
+            foreach ( var f in files )
             {
-                if (exclusions.Where(x => f.FullName.Contains(x)).Count() == 0)
+                if ( exclusions.Where(x => f.FullName.Contains(x)).Count() == 0 )
                 {
                     archive.CreateEntryFromFile(f.FullName, f.FullName.Substring(folder.Length));
                 }
             }
         }
-        catch (Exception ex)
+        catch ( Exception ex )
         {
             Console.WriteLine(ex.Message);
         }
