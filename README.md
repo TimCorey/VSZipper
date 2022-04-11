@@ -16,7 +16,6 @@ Take the generated exe and place it in the directory where you want the Visual S
 ## Roadmap
  * Automated build of the self-contained exe file on commit.
  * Use of a new zip file name if the current one already exists.
- * A dynamic set of exclusions instead of hard-coding them.
  * Make use of the .gitignore file to exclude files and folders.
 
 ## Possible Ideas
