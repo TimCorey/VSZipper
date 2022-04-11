@@ -1,0 +1,53 @@
+name: .NET
+
+on:  
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  DOTNET_VERSION: 6.0.x
+  CONFIGURATION: Release
+
+jobs:
+  build:    
+    runs-on: ubuntu-latest   
+    name: Build
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2 
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }} 
+    
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore
+
+  create-artifacts:    
+    runs-on: ubuntu-latest   
+    name: Create artifacts
+    if: ${{ github.event_name == 'push' }}
+    needs: build
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2 
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Create artifacts
+      run: dotnet publish "VSZipper/VSZipper.csproj" -r win-x64 -c ${{ env.CONFIGURATION }} /p:PublishSingleFile=true --self-contained true -o AppArtifacts
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: Artifacts
+        path: AppArtifacts
