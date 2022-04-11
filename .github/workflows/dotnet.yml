@@ -44,7 +44,7 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
     - name: Create artifacts
-      run: dotnet publish "VSZipper/VSZipper.csproj" -r win-x64 -c ${{ env.CONFIGURATION }} /p:PublishSingleFile=true /p:PublishTrimmed=true --self-contained true -o AppArtifacts
+      run: dotnet publish "VSZipper/VSZipper.csproj" -r win-x64 -c ${{ env.CONFIGURATION }} /p:PublishSingleFile=true --self-contained true -o AppArtifacts
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
