@@ -13,6 +13,6 @@ _config = builder.Build();
 
 Zipper zipper = new(_config);
 
-zipper.Zip();
+await zipper.Zip();
 
 Console.WriteLine("Process Complete");
